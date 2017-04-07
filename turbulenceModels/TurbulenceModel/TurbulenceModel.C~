@@ -121,7 +121,7 @@ Foam::TurbulenceModel<Alpha, Rho, BasicTurbulenceModel, TransportModel>::New
             << dictionaryConstructorTablePtr_->sortedToc()
             << exit(FatalError);
     }
-    // the return statement at the end returns a pointer to the particular turbulence model type (RAS/LES) that is specified in the turbulenceProperties dictionary
+
     return autoPtr<TurbulenceModel>
     (
         cstrIter()(alpha, rho, U, alphaRhoPhi, phi, transport, propertiesName)

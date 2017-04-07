@@ -86,7 +86,8 @@ namespace RASModels
 template<class BasicTurbulenceModel>
 class kEpsilon
 :
-    public eddyViscosity<RASModel<BasicTurbulenceModel>> //If the inheritance is public, everything that is aware of kEpsilon and its children is also aware that they inherit from kEpsilon
+    // the kEpsilon class is an eddyViscosity model, with the RASModel specialization using the template parameter BasicTurbulenceModel (in this case interpreted as IncompressibleTurbulenceModel<transportModel>.
+    public eddyViscosity<RASModel<BasicTurbulenceModel>>
 
 	// RASModel inherited from BasicTurbulenecModel (TurbulenceModel.H)
 	// eddyViscosity inherited from linearViscousStress<BTM>
@@ -104,7 +105,7 @@ protected:
     // Protected data -- only accessible by class/subclass and member functions
 
         // Model coefficients
-	// DimensionedScalar: a class defined in turbulenceModels.H 
+	// DimensionedScalar: a class defined in openFOAM 
             dimensionedScalar Cmu_;
             dimensionedScalar C1_;
             dimensionedScalar C2_;
@@ -127,7 +128,7 @@ protected:
 
 
 public: // Accessible by everyone
-
+    //Here it reads [create and alias] [which is a type] [original] [alias]
     typedef typename BasicTurbulenceModel::alphaField alphaField;
     typedef typename BasicTurbulenceModel::rhoField rhoField;
     typedef typename BasicTurbulenceModel::transportModel transportModel;
@@ -139,7 +140,7 @@ public: // Accessible by everyone
 
     // Constructors
 
-        //- Construct from components
+        //- Construct from components -- WHERE IS PRESSURE volScalarField& p, ??
         kEpsilon
         (
             const alphaField& alpha,
@@ -164,11 +165,11 @@ public: // Accessible by everyone
         virtual bool read();
 
         //- Return the effective diffusivity for k
-        tmp<volScalarField> DkEff() const
-        {
+        tmp<volScalarField> DkEff() const // const ensures the object calling it is not being modified
+        {				  // tmp<> makes the code faster by not copying and deleting instances -> saves memory
             return tmp<volScalarField>
             (
-                new volScalarField
+                new volScalarField   // new -- clear variable manually with delete, and not when gets out of scope.
                 (
                     "DkEff",
                     (this->nut_/sigmak_ + this->nu())

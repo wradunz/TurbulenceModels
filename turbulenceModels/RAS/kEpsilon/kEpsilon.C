@@ -36,6 +36,7 @@ namespace RASModels
 
 // * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * * //
 
+// correctNut() is protected bcs it is only called by kEpsilon<BasicTurbulenceModel>::correct() and not outside the class.
 template<class BasicTurbulenceModel>
 void kEpsilon<BasicTurbulenceModel>::correctNut()
 {
@@ -91,7 +92,7 @@ kEpsilon<BasicTurbulenceModel>::kEpsilon
     const word& propertiesName,
     const word& type
 )
-:
+:   // constructor first uses the constructor of the base class eddyViscosity to initialize
     eddyViscosity<RASModel<BasicTurbulenceModel>>
     (
         type,
@@ -103,7 +104,7 @@ kEpsilon<BasicTurbulenceModel>::kEpsilon
         transport,
         propertiesName
     ),
-
+    // initialization of the properties that are specific to kEpsilon
     Cmu_
     (
         dimensioned<scalar>::lookupOrAddToDict
@@ -158,7 +159,7 @@ kEpsilon<BasicTurbulenceModel>::kEpsilon
             1.3
         )
     ),
-
+    // construct field k
     k_
     (
         IOobject
@@ -171,6 +172,7 @@ kEpsilon<BasicTurbulenceModel>::kEpsilon
         ),
         this->mesh_
     ),
+    // construct field epsilon
     epsilon_
     (
         IOobject
@@ -184,6 +186,7 @@ kEpsilon<BasicTurbulenceModel>::kEpsilon
         this->mesh_
     )
 {
+    // bounding of k and epsilon and writing the model coefficients to the standard output
     bound(k_, this->kMin_);
     bound(epsilon_, this->epsilonMin_);
 
@@ -233,8 +236,10 @@ void kEpsilon<BasicTurbulenceModel>::correct()
     volScalarField& nut = this->nut_;
     fv::options& fvOptions(fv::options::New(this->mesh_));
 
+    // it first calls the correct() function of the base class, in case there are some general things to be done
     eddyViscosity<RASModel<BasicTurbulenceModel>>::correct();
 
+    // discretizes and solves the epsilon and k equations, then bounds the fields:
     volScalarField::Internal divU
     (
         fvc::div(fvc::absolute(this->phi(), U))().v()
@@ -292,6 +297,7 @@ void kEpsilon<BasicTurbulenceModel>::correct()
     fvOptions.correct(k_);
     bound(k_, this->kMin_);
 
+    // Calculates the turbulent viscosity now that we have k and eps (this func is defined here as protected)
     correctNut();
 }
 
