@@ -236,8 +236,10 @@ void kEpsilon<BasicTurbulenceModel>::correct()
     volScalarField& nut = this->nut_;
     fv::options& fvOptions(fv::options::New(this->mesh_));
 
+    // it first calls the correct() function of the base class, in case there are some general things to be done
     eddyViscosity<RASModel<BasicTurbulenceModel>>::correct();
 
+    // discretizes and solves the epsilon and k equations, then bounds the fields:
     volScalarField::Internal divU
     (
         fvc::div(fvc::absolute(this->phi(), U))().v()
@@ -295,6 +297,7 @@ void kEpsilon<BasicTurbulenceModel>::correct()
     fvOptions.correct(k_);
     bound(k_, this->kMin_);
 
+    // Calculates the turbulent viscosity now that we have k and eps (this func is defined here as protected)
     correctNut();
 }
 

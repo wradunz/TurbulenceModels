@@ -1,0 +1,142 @@
+// First of all, the incompressible::turbulenceModel::New function is called @createFields.H
+
+autoPtr<incompressible::turbulenceModel> turbulence
+(
+    incompressible::turbulenceModel::New(U, phi, laminarTransport)
+);
+
+// turbulenceModel is an alias for IncompressibleTurbulenceModel<transportModel> defined @ turbulentTransportModel.H
+
+namespace Foam
+{
+    namespace incompressible
+    {
+        typedef IncompressibleTurbulenceModel<transportModel> turbulenceModel;
+
+// So, we are calling
+
+autoPtr<IncompressibleTurbulenceModel<transportModel>> turbulence
+(
+    IncompressibleTurbulenceModel<transportModel>::New(U, phi, laminarTransport)
+);
+
+// Digging into IncompressibleTurbulenceModel.H we see that is calls IncompressibleTurbulenceModel.C
+
+#ifdef NoRepository
+    #include "IncompressibleTurbulenceModel.C"
+#endif
+
+// And here is the implementation of the New function, which returns a cumbersome reference to IncompressibleTurbulenceModel through autoPtr: return autoPtr<IncompressibleTurbulenceModel> and inside the return it calls New fuckin again. 
+
+template<class TransportModel>
+Foam::autoPtr<Foam::IncompressibleTurbulenceModel<TransportModel>>
+Foam::IncompressibleTurbulenceModel<TransportModel>::New
+(
+    const volVectorField& U,
+    const surfaceScalarField& phi,
+    const TransportModel& transport,
+    const word& propertiesName
+)
+{
+    return autoPtr<IncompressibleTurbulenceModel>
+    (
+        static_cast<IncompressibleTurbulenceModel*>(
+        TurbulenceModel
+        <
+            geometricOneField,
+            geometricOneField,
+            incompressibleTurbulenceModel,
+            TransportModel
+        >::New
+        (
+            geometricOneField(),
+            geometricOneField(),
+            U,
+            phi,
+            phi,
+            transport,
+            propertiesName
+        ).ptr())
+    );
+}
+
+// According to https://pingpong.chalmers.se/public/courseId/7056/lang-en/publicPage.do?item=3256524 it points to @TurbulenceModel.H from which IncompressibleTurbulenceModel.H inherited. The latter calls the implementation TurbulenceModel.C, which finally shows what we wanted:
+
+Foam::TurbulenceModel<Alpha, Rho, BasicTurbulenceModel, TransportModel>::New
+(
+    const alphaField& alpha,
+    const rhoField& rho,
+    const volVectorField& U,
+    const surfaceScalarField& alphaRhoPhi,
+    const surfaceScalarField& phi,
+    const transportModel& transport,
+    const word& propertiesName
+)
+{
+    // get model name, but do not register the dictionary
+    // otherwise it is registered in the database twice
+    const word modelType
+    (
+        IOdictionary
+        (
+            IOobject
+            (
+                IOobject::groupName(propertiesName, U.group()),
+                U.time().constant(),
+                U.db(),
+                IOobject::MUST_READ_IF_MODIFIED,
+                IOobject::NO_WRITE,
+                false
+            )
+        ).lookup("simulationType")
+    );
+
+    Info<< "Selecting turbulence model type " << modelType << endl;
+
+    typename dictionaryConstructorTable::iterator cstrIter =
+        dictionaryConstructorTablePtr_->find(modelType);
+
+    if (cstrIter == dictionaryConstructorTablePtr_->end())
+    {
+        FatalErrorInFunction
+            << "Unknown TurbulenceModel type "
+            << modelType << nl << nl
+            << "Valid TurbulenceModel types:" << endl
+            << dictionaryConstructorTablePtr_->sortedToc()
+            << exit(FatalError);
+    }
+
+    return autoPtr<TurbulenceModel>
+    (
+        cstrIter()(alpha, rho, U, alphaRhoPhi, phi, transport, propertiesName)
+    );
+}
+
+// This piece of code does mainly two things:
+// 1) Reads simulationType from turbulenceProperties dict;
+// 2) Returns a pointer to this model (e.g. RASModel) which calls RASModel.H/RASModel.C
+
+// RASModel.* do the same thing?
+// 1) Read modelType (e.g. kEpsilon);
+// 2) Return a pointer to the model;
+
+// Now we are inside kEpsilon and want to understand BCs and WFs
+
+L44 this->nut_.correctBoundaryConditions();
+
+L257 // Update epsilon and G at the wall
+    epsilon_.boundaryFieldRef().updateCoeffs();
+
+L275 epsEqn.ref().boundaryManipulate(epsilon_.boundaryFieldRef());
+
+
+
+
+
+
+
+
+
+
+
+
