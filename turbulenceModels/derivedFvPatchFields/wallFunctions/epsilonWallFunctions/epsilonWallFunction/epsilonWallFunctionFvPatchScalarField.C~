@@ -61,7 +61,7 @@ void Foam::epsilonWallFunctionFvPatchScalarField::writeLocalEntries
     os.writeKeyword("E") << E_ << token::END_STATEMENT << nl;
 }
 
-// setMaster function will set all the near wall cell as master(value is -1), if it is master cell, then wall function is used, else it will call turbulence internal function to calculate G and epsilon and then update the coefficient.
+// setMaster function will set all the near wall cell as master(value is 1), if it is master cell, then wall function is used, else it will call turbulence internal function to calculate G and epsilon and then update the coefficient.
 
 void Foam::epsilonWallFunctionFvPatchScalarField::setMaster()
 {

@@ -219,7 +219,7 @@ bool kEpsilon<BasicTurbulenceModel>::read()
     }
 }
 
-
+// kEpsilon correct() -- calculates epsilon, then TKE and lastly nut.
 template<class BasicTurbulenceModel>
 void kEpsilon<BasicTurbulenceModel>::correct()
 {
@@ -253,7 +253,7 @@ void kEpsilon<BasicTurbulenceModel>::correct()
     );
     tgradU.clear();
 
-    // Update epsilon and G at the wall
+    // WF -- Update epsilon and G at the wall. Supposedly, updateCoeffs() calls the chosen WF, calculates nut and return its value
     epsilon_.boundaryFieldRef().updateCoeffs();
 
     // Dissipation equation
@@ -272,8 +272,13 @@ void kEpsilon<BasicTurbulenceModel>::correct()
 
     epsEqn.ref().relax();
     fvOptions.constrain(epsEqn.ref());
+
+    // WF -- With the updated G, the epsilon eqn is revised by this:
     epsEqn.ref().boundaryManipulate(epsilon_.boundaryFieldRef());
+
+    // Solve the epsilon equation
     solve(epsEqn);
+
     fvOptions.correct(epsilon_);
     bound(epsilon_, this->epsilonMin_);
 
@@ -293,6 +298,8 @@ void kEpsilon<BasicTurbulenceModel>::correct()
 
     kEqn.ref().relax();
     fvOptions.constrain(kEqn.ref());
+    
+    // Solve the TKE equation
     solve(kEqn);
     fvOptions.correct(k_);
     bound(k_, this->kMin_);
