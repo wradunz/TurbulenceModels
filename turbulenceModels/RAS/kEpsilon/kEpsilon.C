@@ -40,7 +40,9 @@ namespace RASModels
 template<class BasicTurbulenceModel>
 void kEpsilon<BasicTurbulenceModel>::correctNut()
 {
-    this->nut_ = Cmu_*sqr(k_)/epsilon_; // this -> performs operation for the object which called the function e.g. 
+    this->nut_ = Cmu_*sqr(k_)/epsilon_;
+
+    // Reads/updates BCs 
     this->nut_.correctBoundaryConditions();
     fv::options::New(this->mesh_).correct(this->nut_);
 
