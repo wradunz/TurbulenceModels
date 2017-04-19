@@ -23,7 +23,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "epsilonWallFunctionFvPatchScalarField.H"
+#include "epsilonOngWallFunctionFvPatchScalarField.H"
 #include "turbulenceModel.H"
 #include "fvPatchFieldMapper.H"
 #include "fvMatrix.H"
@@ -33,11 +33,11 @@ License
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
-Foam::scalar Foam::epsilonWallFunctionFvPatchScalarField::tolerance_ = 1e-5;
+Foam::scalar Foam::epsilonOngWallFunctionFvPatchScalarField::tolerance_ = 1e-5;
 
 // * * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * //
 
-void Foam::epsilonWallFunctionFvPatchScalarField::checkType()
+void Foam::epsilonOngWallFunctionFvPatchScalarField::checkType()
 {
     if (!isA<wallFvPatch>(patch()))
     {
@@ -51,7 +51,7 @@ void Foam::epsilonWallFunctionFvPatchScalarField::checkType()
 }
 
 
-void Foam::epsilonWallFunctionFvPatchScalarField::writeLocalEntries
+void Foam::epsilonOngWallFunctionFvPatchScalarField::writeLocalEntries
 (
     Ostream& os
 ) const
@@ -63,7 +63,7 @@ void Foam::epsilonWallFunctionFvPatchScalarField::writeLocalEntries
 
 // setMaster function will set all the near wall cell as master(value is -1), if it is master cell, then wall function is used, else it will call turbulence internal function to calculate G and epsilon and then update the coefficient.
 
-void Foam::epsilonWallFunctionFvPatchScalarField::setMaster()
+void Foam::epsilonOngWallFunctionFvPatchScalarField::setMaster()
 {
     if (master_ != -1)
     {
@@ -78,9 +78,9 @@ void Foam::epsilonWallFunctionFvPatchScalarField::setMaster()
     label master = -1;
     forAll(bf, patchi)
     {
-        if (isA<epsilonWallFunctionFvPatchScalarField>(bf[patchi]))
+        if (isA<epsilonOngWallFunctionFvPatchScalarField>(bf[patchi]))
         {
-            epsilonWallFunctionFvPatchScalarField& epf = epsilonPatch(patchi);
+            epsilonOngWallFunctionFvPatchScalarField& epf = epsilonPatch(patchi);
 
             if (master == -1)
             {
@@ -93,7 +93,7 @@ void Foam::epsilonWallFunctionFvPatchScalarField::setMaster()
 }
 
 
-void Foam::epsilonWallFunctionFvPatchScalarField::createAveragingWeights()
+void Foam::epsilonOngWallFunctionFvPatchScalarField::createAveragingWeights()
 {
     const volScalarField& epsilon =
         static_cast<const volScalarField&>(this->internalField());
@@ -125,7 +125,7 @@ void Foam::epsilonWallFunctionFvPatchScalarField::createAveragingWeights()
     DynamicList<label> epsilonPatches(bf.size());
     forAll(bf, patchi)
     {
-        if (isA<epsilonWallFunctionFvPatchScalarField>(bf[patchi]))
+        if (isA<epsilonOngWallFunctionFvPatchScalarField>(bf[patchi]))
         {
             epsilonPatches.append(patchi);
 
@@ -152,22 +152,22 @@ void Foam::epsilonWallFunctionFvPatchScalarField::createAveragingWeights()
 }
 
 
-Foam::epsilonWallFunctionFvPatchScalarField&
-Foam::epsilonWallFunctionFvPatchScalarField::epsilonPatch(const label patchi)
+Foam::epsilonOngWallFunctionFvPatchScalarField&
+Foam::epsilonOngWallFunctionFvPatchScalarField::epsilonPatch(const label patchi)
 {
     const volScalarField& epsilon =
         static_cast<const volScalarField&>(this->internalField());
 
     const volScalarField::Boundary& bf = epsilon.boundaryField();
 
-    const epsilonWallFunctionFvPatchScalarField& epf =
-        refCast<const epsilonWallFunctionFvPatchScalarField>(bf[patchi]);
+    const epsilonOngWallFunctionFvPatchScalarField& epf =
+        refCast<const epsilonOngWallFunctionFvPatchScalarField>(bf[patchi]);
 
-    return const_cast<epsilonWallFunctionFvPatchScalarField&>(epf);
+    return const_cast<epsilonOngWallFunctionFvPatchScalarField&>(epf);
 }
 
 
-void Foam::epsilonWallFunctionFvPatchScalarField::calculateTurbulenceFields
+void Foam::epsilonOngWallFunctionFvPatchScalarField::calculateTurbulenceFields
 (
     const turbulenceModel& turbulence,
     scalarField& G0,
@@ -179,7 +179,7 @@ void Foam::epsilonWallFunctionFvPatchScalarField::calculateTurbulenceFields
     {
         if (!cornerWeights_[patchi].empty())
         {
-            epsilonWallFunctionFvPatchScalarField& epf = epsilonPatch(patchi);
+            epsilonOngWallFunctionFvPatchScalarField& epf = epsilonPatch(patchi);
 
             const List<scalar>& w = cornerWeights_[patchi];
 
@@ -192,7 +192,7 @@ void Foam::epsilonWallFunctionFvPatchScalarField::calculateTurbulenceFields
     {
         if (!cornerWeights_[patchi].empty())
         {
-            epsilonWallFunctionFvPatchScalarField& epf = epsilonPatch(patchi);
+            epsilonOngWallFunctionFvPatchScalarField& epf = epsilonPatch(patchi);
 
             epf == scalarField(epsilon0, epf.patch().faceCells());
         }
@@ -200,7 +200,7 @@ void Foam::epsilonWallFunctionFvPatchScalarField::calculateTurbulenceFields
 }
 
 
-void Foam::epsilonWallFunctionFvPatchScalarField::calculate
+void Foam::epsilonOngWallFunctionFvPatchScalarField::calculate
 (
     const turbulenceModel& turbulence,
     const List<scalar>& cornerWeights,
@@ -250,8 +250,8 @@ void Foam::epsilonWallFunctionFvPatchScalarField::calculate
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::epsilonWallFunctionFvPatchScalarField::
-epsilonWallFunctionFvPatchScalarField
+Foam::epsilonOngWallFunctionFvPatchScalarField::
+epsilonOngWallFunctionFvPatchScalarField
 (
     const fvPatch& p,
     const DimensionedField<scalar, volMesh>& iF
@@ -271,10 +271,10 @@ epsilonWallFunctionFvPatchScalarField
 }
 
 
-Foam::epsilonWallFunctionFvPatchScalarField::
-epsilonWallFunctionFvPatchScalarField
+Foam::epsilonOngWallFunctionFvPatchScalarField::
+epsilonOngWallFunctionFvPatchScalarField
 (
-    const epsilonWallFunctionFvPatchScalarField& ptf,
+    const epsilonOngWallFunctionFvPatchScalarField& ptf,
     const fvPatch& p,
     const DimensionedField<scalar, volMesh>& iF,
     const fvPatchFieldMapper& mapper
@@ -294,8 +294,8 @@ epsilonWallFunctionFvPatchScalarField
 }
 
 
-Foam::epsilonWallFunctionFvPatchScalarField::
-epsilonWallFunctionFvPatchScalarField
+Foam::epsilonOngWallFunctionFvPatchScalarField::
+epsilonOngWallFunctionFvPatchScalarField
 (
     const fvPatch& p,
     const DimensionedField<scalar, volMesh>& iF,
@@ -319,10 +319,10 @@ epsilonWallFunctionFvPatchScalarField
 }
 
 
-Foam::epsilonWallFunctionFvPatchScalarField::
-epsilonWallFunctionFvPatchScalarField
+Foam::epsilonOngWallFunctionFvPatchScalarField::
+epsilonOngWallFunctionFvPatchScalarField
 (
-    const epsilonWallFunctionFvPatchScalarField& ewfpsf
+    const epsilonOngWallFunctionFvPatchScalarField& ewfpsf
 )
 :
     fixedValueFvPatchField<scalar>(ewfpsf),
@@ -339,10 +339,10 @@ epsilonWallFunctionFvPatchScalarField
 }
 
 
-Foam::epsilonWallFunctionFvPatchScalarField::
-epsilonWallFunctionFvPatchScalarField
+Foam::epsilonOngWallFunctionFvPatchScalarField::
+epsilonOngWallFunctionFvPatchScalarField
 (
-    const epsilonWallFunctionFvPatchScalarField& ewfpsf,
+    const epsilonOngWallFunctionFvPatchScalarField& ewfpsf,
     const DimensionedField<scalar, volMesh>& iF
 )
 :
@@ -362,7 +362,7 @@ epsilonWallFunctionFvPatchScalarField
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-Foam::scalarField& Foam::epsilonWallFunctionFvPatchScalarField::G(bool init)
+Foam::scalarField& Foam::epsilonOngWallFunctionFvPatchScalarField::G(bool init)
 {
     if (patch().index() == master_)
     {
@@ -378,7 +378,7 @@ Foam::scalarField& Foam::epsilonWallFunctionFvPatchScalarField::G(bool init)
 }
 
 
-Foam::scalarField& Foam::epsilonWallFunctionFvPatchScalarField::epsilon
+Foam::scalarField& Foam::epsilonOngWallFunctionFvPatchScalarField::epsilon
 (
     bool init
 )
@@ -397,7 +397,7 @@ Foam::scalarField& Foam::epsilonWallFunctionFvPatchScalarField::epsilon
 }
 
 
-void Foam::epsilonWallFunctionFvPatchScalarField::updateCoeffs()
+void Foam::epsilonOngWallFunctionFvPatchScalarField::updateCoeffs()
 {
     if (updated())
     {
@@ -446,7 +446,7 @@ void Foam::epsilonWallFunctionFvPatchScalarField::updateCoeffs()
 }
 
 
-void Foam::epsilonWallFunctionFvPatchScalarField::updateWeightedCoeffs
+void Foam::epsilonOngWallFunctionFvPatchScalarField::updateWeightedCoeffs
 (
     const scalarField& weights
 )
@@ -507,7 +507,7 @@ void Foam::epsilonWallFunctionFvPatchScalarField::updateWeightedCoeffs
 }
 
 
-void Foam::epsilonWallFunctionFvPatchScalarField::manipulateMatrix
+void Foam::epsilonOngWallFunctionFvPatchScalarField::manipulateMatrix
 (
     fvMatrix<scalar>& matrix
 )
@@ -523,7 +523,7 @@ void Foam::epsilonWallFunctionFvPatchScalarField::manipulateMatrix
 }
 
 
-void Foam::epsilonWallFunctionFvPatchScalarField::manipulateMatrix
+void Foam::epsilonOngWallFunctionFvPatchScalarField::manipulateMatrix
 (
     fvMatrix<scalar>& matrix,
     const Field<scalar>& weights
@@ -576,7 +576,7 @@ void Foam::epsilonWallFunctionFvPatchScalarField::manipulateMatrix
 }
 
 
-void Foam::epsilonWallFunctionFvPatchScalarField::write(Ostream& os) const
+void Foam::epsilonOngWallFunctionFvPatchScalarField::write(Ostream& os) const
 {
     writeLocalEntries(os);
     fixedValueFvPatchField<scalar>::write(os);
@@ -590,7 +590,7 @@ namespace Foam
     makePatchTypeField
     (
         fvPatchScalarField,
-        epsilonWallFunctionFvPatchScalarField
+        epsilonOngWallFunctionFvPatchScalarField
     );
 }
 

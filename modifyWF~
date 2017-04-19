@@ -1,0 +1,9 @@
+// How to modify a wall function? //
+
+1) Make a copy of the wall function directory most similar to the one to be implemented;
+
+2) Rename the source and header files with the new name;
+
+3) Change all text instances of the former wall function to the new one with: sed -i s/oldWallFunctionName/newWallFunctionName/g newWallFunctionName.H (also for the .C file)
+
+4) 
