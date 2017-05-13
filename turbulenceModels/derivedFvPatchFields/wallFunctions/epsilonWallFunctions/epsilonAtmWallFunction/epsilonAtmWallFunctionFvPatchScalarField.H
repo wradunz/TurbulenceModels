@@ -22,7 +22,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::epsilonWallFunctionFvPatchScalarField
+    Foam::epsilonAtmWallFunctionFvPatchScalarField
 
 Group
     grpWallFunctions
@@ -55,7 +55,7 @@ Usage
     \verbatim
     <patchName>
     {
-        type            epsilonWallFunction;
+        type            epsilonAtmWallFunction;
     }
     \endverbatim
 
@@ -63,12 +63,12 @@ See also
     Foam::fixedInternalValueFvPatchField
 
 SourceFiles
-    epsilonWallFunctionFvPatchScalarField.C
+    epsilonAtmWallFunctionFvPatchScalarField.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef epsilonWallFunctionFvPatchScalarField_H
-#define epsilonWallFunctionFvPatchScalarField_H
+#ifndef epsilonAtmWallFunctionFvPatchScalarField_H
+#define epsilonAtmWallFunctionFvPatchScalarField_H
 
 #include "fixedValueFvPatchField.H"
 
@@ -80,16 +80,19 @@ namespace Foam
 class turbulenceModel;
 
 /*---------------------------------------------------------------------------*\
-           Class epsilonWallFunctionFvPatchScalarField Declaration
+           Class epsilonAtmWallFunctionFvPatchScalarField Declaration
 \*---------------------------------------------------------------------------*/
 
-class epsilonWallFunctionFvPatchScalarField
+class epsilonAtmWallFunctionFvPatchScalarField
 :
     public fixedValueFvPatchField<scalar>
 {
 protected:
 
     // Protected data
+
+	//- Surface roughness length 						// THIS WAS ADDED//
+	scalarField z0_;
 
         //- Tolerance used in weighted calculations
         static scalar tolerance_;
@@ -136,7 +139,7 @@ protected:
         virtual void createAveragingWeights();
 
         //- Helper function to return non-const access to an epsilon patch
-        virtual epsilonWallFunctionFvPatchScalarField& epsilonPatch
+        virtual epsilonAtmWallFunctionFvPatchScalarField& epsilonPatch
         (
             const label patchi
         );
@@ -156,7 +159,8 @@ protected:
             const List<scalar>& cornerWeights,
             const fvPatch& patch,
             scalarField& G,
-            scalarField& epsilon
+            scalarField& epsilon,
+	    scalarField& z0						// THIS WAS ADDED//
         );
 
         //- Return non-const access to the master patch ID
@@ -169,20 +173,20 @@ protected:
 public:
 
     //- Runtime type information
-    TypeName("epsilonWallFunction");
+    TypeName("epsilonAtmWallFunction");
 
 
     // Constructors
 
         //- Construct from patch and internal field
-        epsilonWallFunctionFvPatchScalarField
+        epsilonAtmWallFunctionFvPatchScalarField
         (
             const fvPatch&,
             const DimensionedField<scalar, volMesh>&
         );
 
         //- Construct from patch, internal field and dictionary
-        epsilonWallFunctionFvPatchScalarField
+        epsilonAtmWallFunctionFvPatchScalarField
         (
             const fvPatch&,
             const DimensionedField<scalar, volMesh>&,
@@ -190,20 +194,20 @@ public:
         );
 
         //- Construct by mapping given
-        //  epsilonWallFunctionFvPatchScalarField
+        //  epsilonAtmWallFunctionFvPatchScalarField
         //  onto a new patch
-        epsilonWallFunctionFvPatchScalarField
+        epsilonAtmWallFunctionFvPatchScalarField
         (
-            const epsilonWallFunctionFvPatchScalarField&,
+            const epsilonAtmWallFunctionFvPatchScalarField&,
             const fvPatch&,
             const DimensionedField<scalar, volMesh>&,
             const fvPatchFieldMapper&
         );
 
         //- Construct as copy
-        epsilonWallFunctionFvPatchScalarField
+        epsilonAtmWallFunctionFvPatchScalarField
         (
-            const epsilonWallFunctionFvPatchScalarField&
+            const epsilonAtmWallFunctionFvPatchScalarField&
         );
 
         //- Construct and return a clone
@@ -211,14 +215,14 @@ public:
         {
             return tmp<fvPatchScalarField>
             (
-                new epsilonWallFunctionFvPatchScalarField(*this)
+                new epsilonAtmWallFunctionFvPatchScalarField(*this)
             );
         }
 
         //- Construct as copy setting internal field reference
-        epsilonWallFunctionFvPatchScalarField
+        epsilonAtmWallFunctionFvPatchScalarField
         (
-            const epsilonWallFunctionFvPatchScalarField&,
+            const epsilonAtmWallFunctionFvPatchScalarField&,
             const DimensionedField<scalar, volMesh>&
         );
 
@@ -230,12 +234,12 @@ public:
         {
             return tmp<fvPatchScalarField>
             (
-                new epsilonWallFunctionFvPatchScalarField(*this, iF)
+                new epsilonAtmWallFunctionFvPatchScalarField(*this, iF)
             );
         }
 
     //- Destructor
-    virtual ~epsilonWallFunctionFvPatchScalarField()
+    virtual ~epsilonAtmWallFunctionFvPatchScalarField()
     {}
 
 

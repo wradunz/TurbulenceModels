@@ -28,6 +28,8 @@ derivedFvPatchFields/porousBafflePressure/porousBafflePressureFvPatchField.C
 /* Wall function BCs */
 wallFunctions = derivedFvPatchFields/wallFunctions
 
+$(kqRWallFunctions)/kOngWallFunction/kOngWallFunctionFvPatchScalarField.C
+
 nutWallFunctions = $(wallFunctions)/nutWallFunctions
 $(nutWallFunctions)/nutWallFunction/nutWallFunctionFvPatchScalarField.C
 
@@ -72,7 +74,8 @@ $(RASBCs)/atmBoundaryLayerInletK/atmBoundaryLayerInletKFvPatchScalarField.C
 $(RASBCs)/atmBoundaryLayerInletEpsilon/atmBoundaryLayerInletEpsilonFvPatchScalarField.C
 
 $(epsilonWallFunctions)/epsilonOngWallFunction/epsilonOngWallFunctionFvPatchScalarField.C
+$(epsilonWallFunctions)/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C
 /* $(nutWallFunctions)/nutOngWallFunction/nutOngWallFunctionFvPatchScalarField.C */
-$(kqRWallFunctions)/kOngWallFunction/kOngWallFunctionFvPatchScalarField.C
+
 
 LIB = $(FOAM_USER_LIBBIN)/libturbulenceModels
