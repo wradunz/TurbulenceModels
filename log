@@ -1,0 +1,53 @@
++ wmake libso turbulenceModels
+g++ -std=c++0x -m64 -Dlinux64 -DWM_ARCH_OPTION=64 -DWM_DP -DWM_LABEL_SIZE=32 -Wall -Wextra -Wold-style-cast -Wnon-virtual-dtor -Wno-unused-parameter -Wno-invalid-offsetof -O3  -DNoRepository -ftemplate-depth-100 -I/opt/openfoam4/src/finiteVolume/lnInclude -I/opt/openfoam4/src/meshTools/lnInclude -IlnInclude -I. -I/opt/openfoam4/src/OpenFOAM/lnInclude -I/opt/openfoam4/src/OSspecific/POSIX/lnInclude   -fPIC -c derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C -o Make/linux64GccDPInt32Opt/derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.o
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C: In member function ‘virtual void Foam::epsilonAtmWallFunctionFvPatchScalarField::calculateTurbulenceFields(const Foam::turbulenceModel&, Foam::scalarField&, Foam::scalarField&)’:
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:187:67: error: no matching function for call to ‘Foam::epsilonAtmWallFunctionFvPatchScalarField::calculate(const Foam::turbulenceModel&, const Foam::List<double>&, const Foam::fvPatch&, Foam::scalarField&, Foam::scalarField&)’
+             epf.calculate(turbulence, w, epf.patch(), G0, epsilon0);
+                                                                   ^
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:187:67: note: candidate is:
+In file included from derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:26:0:
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.H:156:22: note: virtual void Foam::epsilonAtmWallFunctionFvPatchScalarField::calculate(const Foam::turbulenceModel&, const Foam::List<double>&, const Foam::fvPatch&, Foam::scalarField&, Foam::scalarField&, Foam::scalarField&)
+         virtual void calculate
+                      ^
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.H:156:22: note:   candidate expects 6 arguments, 5 provided
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C: In constructor ‘Foam::epsilonAtmWallFunctionFvPatchScalarField::epsilonAtmWallFunctionFvPatchScalarField(const Foam::fvPatch&, const Foam::DimensionedField<double, Foam::volMesh>&)’:
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:271:5: error: expected ‘{’ before ‘z0_’
+     z0_(p.size(), 0.0)
+     ^
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C: At global scope:
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:271:8: error: expected constructor, destructor, or type conversion before ‘(’ token
+     z0_(p.size(), 0.0)
+        ^
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C: In constructor ‘Foam::epsilonAtmWallFunctionFvPatchScalarField::epsilonAtmWallFunctionFvPatchScalarField(const Foam::epsilonAtmWallFunctionFvPatchScalarField&, const Foam::fvPatch&, const Foam::DimensionedField<double, Foam::volMesh>&, const Foam::fvPatchFieldMapper&)’:
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:295:5: error: expected ‘{’ before ‘z0_’
+     z0_(ptf.z0_, mapper)
+     ^
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C: At global scope:
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:295:8: error: expected constructor, destructor, or type conversion before ‘(’ token
+     z0_(ptf.z0_, mapper)
+        ^
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C: In constructor ‘Foam::epsilonAtmWallFunctionFvPatchScalarField::epsilonAtmWallFunctionFvPatchScalarField(const Foam::fvPatch&, const Foam::DimensionedField<double, Foam::volMesh>&, const Foam::dictionary&)’:
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:318:5: error: expected ‘{’ before ‘z0_’
+     z0_("z0", dict, p.size())
+     ^
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C: At global scope:
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:318:8: error: expected constructor, destructor, or type conversion before ‘(’ token
+     z0_("z0", dict, p.size())
+        ^
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C: In copy constructor ‘Foam::epsilonAtmWallFunctionFvPatchScalarField::epsilonAtmWallFunctionFvPatchScalarField(const Foam::epsilonAtmWallFunctionFvPatchScalarField&)’:
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:342:5: error: expected ‘{’ before ‘z0_’
+     z0_(ewfpsf.z0_)
+     ^
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C: At global scope:
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:342:8: error: expected constructor, destructor, or type conversion before ‘(’ token
+     z0_(ewfpsf.z0_)
+        ^
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C: In constructor ‘Foam::epsilonAtmWallFunctionFvPatchScalarField::epsilonAtmWallFunctionFvPatchScalarField(const Foam::epsilonAtmWallFunctionFvPatchScalarField&, const Foam::DimensionedField<double, Foam::volMesh>&)’:
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:364:5: error: expected ‘{’ before ‘z0_’
+     z0_(ewfpsf.z0_)
+     ^
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C: At global scope:
+derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C:364:8: error: expected constructor, destructor, or type conversion before ‘(’ token
+     z0_(ewfpsf.z0_)
+        ^
+make: *** [Make/linux64GccDPInt32Opt/derivedFvPatchFields/wallFunctions/epsilonWallFunctions/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.o] Error 1
