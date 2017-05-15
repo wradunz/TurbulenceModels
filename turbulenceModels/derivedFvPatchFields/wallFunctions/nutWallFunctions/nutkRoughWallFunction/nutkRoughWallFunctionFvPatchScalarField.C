@@ -88,7 +88,7 @@ tmp<scalarField> nutkRoughWallFunctionFvPatchScalarField::calcNut() const
 
         scalar uStar = Cmu25*sqrt(k[faceCelli]);
         scalar yPlus = uStar*y[facei]/nuw[facei];
-        scalar KsPlus = uStar*Ks_[facei]/nuw[facei];
+        scalar KsPlus = uStar*Ks_[facei]/nuw[facei];								// KS HERE //
 
         scalar Edash = E_;
         if (KsPlus > 2.25)
@@ -134,7 +134,7 @@ nutkRoughWallFunctionFvPatchScalarField::nutkRoughWallFunctionFvPatchScalarField
 )
 :
     nutkWallFunctionFvPatchScalarField(p, iF),
-    Ks_(p.size(), 0.0),
+    Ks_(p.size(), 0.0),								// KS HERE //
     Cs_(p.size(), 0.0)
 {}
 
@@ -148,7 +148,7 @@ nutkRoughWallFunctionFvPatchScalarField::nutkRoughWallFunctionFvPatchScalarField
 )
 :
     nutkWallFunctionFvPatchScalarField(ptf, p, iF, mapper),
-    Ks_(ptf.Ks_, mapper),
+    Ks_(ptf.Ks_, mapper),								// KS HERE //
     Cs_(ptf.Cs_, mapper)
 {}
 
@@ -161,7 +161,7 @@ nutkRoughWallFunctionFvPatchScalarField::nutkRoughWallFunctionFvPatchScalarField
 )
 :
     nutkWallFunctionFvPatchScalarField(p, iF, dict),
-    Ks_("Ks", dict, p.size()),
+    Ks_("Ks", dict, p.size()),								// KS HERE //
     Cs_("Cs", dict, p.size())
 {}
 
@@ -172,7 +172,7 @@ nutkRoughWallFunctionFvPatchScalarField::nutkRoughWallFunctionFvPatchScalarField
 )
 :
     nutkWallFunctionFvPatchScalarField(rwfpsf),
-    Ks_(rwfpsf.Ks_),
+    Ks_(rwfpsf.Ks_),								// KS HERE //
     Cs_(rwfpsf.Cs_)
 {}
 
@@ -184,7 +184,7 @@ nutkRoughWallFunctionFvPatchScalarField::nutkRoughWallFunctionFvPatchScalarField
 )
 :
     nutkWallFunctionFvPatchScalarField(rwfpsf, iF),
-    Ks_(rwfpsf.Ks_),
+    Ks_(rwfpsf.Ks_),								// KS HERE //
     Cs_(rwfpsf.Cs_)
 {}
 
@@ -197,7 +197,7 @@ void nutkRoughWallFunctionFvPatchScalarField::autoMap
 )
 {
     nutkWallFunctionFvPatchScalarField::autoMap(m);
-    Ks_.autoMap(m);
+    Ks_.autoMap(m);								// KS HERE //
     Cs_.autoMap(m);
 }
 
@@ -213,7 +213,7 @@ void nutkRoughWallFunctionFvPatchScalarField::rmap
     const nutkRoughWallFunctionFvPatchScalarField& nrwfpsf =
         refCast<const nutkRoughWallFunctionFvPatchScalarField>(ptf);
 
-    Ks_.rmap(nrwfpsf.Ks_, addr);
+    Ks_.rmap(nrwfpsf.Ks_, addr);								// KS HERE //
     Cs_.rmap(nrwfpsf.Cs_, addr);
 }
 
@@ -223,7 +223,7 @@ void nutkRoughWallFunctionFvPatchScalarField::write(Ostream& os) const
     fvPatchField<scalar>::write(os);
     writeLocalEntries(os);
     Cs_.writeEntry("Cs", os);
-    Ks_.writeEntry("Ks", os);
+    Ks_.writeEntry("Ks", os);								// KS HERE //
     writeEntry("value", os);
 }
 

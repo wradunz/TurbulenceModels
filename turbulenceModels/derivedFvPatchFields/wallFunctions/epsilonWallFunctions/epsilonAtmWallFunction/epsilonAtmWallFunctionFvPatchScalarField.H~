@@ -159,8 +159,8 @@ protected:
             const List<scalar>& cornerWeights,
             const fvPatch& patch,
             scalarField& G,
-            scalarField& epsilon,
-	    scalarField& z0						// THIS WAS ADDED//
+            scalarField& epsilon//,
+	    //scalarField& z0						// THIS WAS REMOVED ADDED//
         );
 
         //- Return non-const access to the master patch ID
@@ -253,6 +253,11 @@ public:
             //- Return non-const access to the master's epsilon field
             scalarField& epsilon(bool init = false);
 
+	    // Return z0
+            scalarField& z0()
+            {
+                return z0_;
+            }							// ADDED 2 //
 
         // Evaluation functions
 

@@ -85,7 +85,7 @@ protected:
     // Protected data
 
         //- Roughness height
-        scalarField Ks_;
+        scalarField Ks_;								// KS HERE //
 
         //- Roughness constant
         scalarField Cs_;
@@ -174,7 +174,7 @@ public:
         // Acces functions
 
             // Return Ks
-            scalarField& Ks()
+            scalarField& Ks()								// KS HERE //
             {
                 return Ks_;
             }

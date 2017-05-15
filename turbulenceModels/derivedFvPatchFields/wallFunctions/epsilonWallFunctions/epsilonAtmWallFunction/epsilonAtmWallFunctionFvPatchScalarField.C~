@@ -148,6 +148,7 @@ void Foam::epsilonAtmWallFunctionFvPatchScalarField::createAveragingWeights()
 
     G_.setSize(internalField().size(), 0.0);
     epsilon_.setSize(internalField().size(), 0.0);
+    //z0_.setSize(internalField().size(), 0.0);  							//ADDED 2
 
     initialised_ = true;
 }
@@ -172,7 +173,8 @@ void Foam::epsilonAtmWallFunctionFvPatchScalarField::calculateTurbulenceFields
 (
     const turbulenceModel& turbulence,
     scalarField& G0,
-    scalarField& epsilon0
+    scalarField& epsilon0//,
+    //scalarField& z0,  							//ADDED 2
 )
 {
     // accumulate all of the G and epsilon contributions
@@ -184,7 +186,7 @@ void Foam::epsilonAtmWallFunctionFvPatchScalarField::calculateTurbulenceFields
 
             const List<scalar>& w = cornerWeights_[patchi];
 
-            epf.calculate(turbulence, w, epf.patch(), G0, epsilon0);
+            epf.calculate(turbulence, w, epf.patch(), G0, epsilon0/*, z0*/);					//ADDED 2
         }
     }
 
@@ -207,8 +209,8 @@ void Foam::epsilonAtmWallFunctionFvPatchScalarField::calculate
     const List<scalar>& cornerWeights,
     const fvPatch& patch,
     scalarField& G,
-    scalarField& epsilon,
-    scalarField& z0
+    scalarField& epsilon/*,
+    scalarField& z0*/
 )
 {
     const label patchi = patch.index();
@@ -267,7 +269,7 @@ epsilonAtmWallFunctionFvPatchScalarField
     epsilon_(),
     initialised_(false),
     master_(-1),
-    cornerWeights_()
+    cornerWeights_(),
     z0_(p.size(), 0.0)
 {
     checkType();
@@ -291,7 +293,7 @@ epsilonAtmWallFunctionFvPatchScalarField
     epsilon_(),
     initialised_(false),
     master_(-1),
-    cornerWeights_()
+    cornerWeights_(),
     z0_(ptf.z0_, mapper)
 {
     checkType();
@@ -314,7 +316,7 @@ epsilonAtmWallFunctionFvPatchScalarField
     epsilon_(),
     initialised_(false),
     master_(-1),
-    cornerWeights_()
+    cornerWeights_(),
     z0_("z0", dict, p.size())
 {
     checkType();
@@ -338,7 +340,7 @@ epsilonAtmWallFunctionFvPatchScalarField
     epsilon_(),
     initialised_(false),
     master_(-1),
-    cornerWeights_()
+    cornerWeights_(),
     z0_(ewfpsf.z0_)
 {
     checkType();
@@ -360,7 +362,7 @@ epsilonAtmWallFunctionFvPatchScalarField
     epsilon_(),
     initialised_(false),
     master_(-1),
-    cornerWeights_()
+    cornerWeights_(),
     z0_(ewfpsf.z0_)
 {
     checkType();
@@ -403,7 +405,7 @@ Foam::scalarField& Foam::epsilonAtmWallFunctionFvPatchScalarField::epsilon
     return epsilonPatch(master_).epsilon(init);
 }
 
-
+// updateCoeffs() Definition
 void Foam::epsilonAtmWallFunctionFvPatchScalarField::updateCoeffs()
 {
     if (updated())
@@ -420,6 +422,7 @@ void Foam::epsilonAtmWallFunctionFvPatchScalarField::updateCoeffs()
         )
     );
 
+    // Calls setMaster();
     setMaster();
 
     if (patch().index() == master_)
@@ -452,7 +455,7 @@ void Foam::epsilonAtmWallFunctionFvPatchScalarField::updateCoeffs()
     fvPatchField<scalar>::updateCoeffs();
 }
 
-
+// updateWeightedCoeffs() definition
 void Foam::epsilonAtmWallFunctionFvPatchScalarField::updateWeightedCoeffs
 (
     const scalarField& weights
