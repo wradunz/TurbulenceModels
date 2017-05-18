@@ -134,6 +134,26 @@ L275 epsEqn.ref().boundaryManipulate(epsilon_.boundaryFieldRef());
 
 
 
+							// MATRIX OPERATIONS //
+Matrix.H
+	    //- Return the number of rows
+            inline label m() const;
+
+            //- Return the number of columns
+            inline label n() const;
+
+            //- Return the number of elements in matrix (m*n)
+            inline label size() const;
+
+            //- Return element vector of the constant Matrix
+            inline const Type* v() const;
+
+            //- Return element vector of the Matrix
+            inline Type* v();
+
+
+
+
 
 
 

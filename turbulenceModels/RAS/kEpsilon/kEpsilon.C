@@ -248,10 +248,10 @@ void kEpsilon<BasicTurbulenceModel>::correct()
     );
 
     tmp<volTensorField> tgradU = fvc::grad(U);
-    volScalarField::Internal G
+    volScalarField::Internal G // This is actually literature's G/rho
     (
         this->GName(),
-        nut.v()*(dev(twoSymm(tgradU().v())) && tgradU().v())
+        nut.v()*(dev(twoSymm(tgradU().v())) && tgradU().v()) // .v() returns vector element of tensor (??)
     );
     tgradU.clear();
 
@@ -261,15 +261,15 @@ void kEpsilon<BasicTurbulenceModel>::correct()
     // Dissipation equation
     tmp<fvScalarMatrix> epsEqn
     (
-        fvm::ddt(alpha, rho, epsilon_)
-      + fvm::div(alphaRhoPhi, epsilon_)
-      - fvm::laplacian(alpha*rho*DepsilonEff(), epsilon_)
+        fvm::ddt(alpha, rho, epsilon_) // temportal variation
+      + fvm::div(alphaRhoPhi, epsilon_) // spatial variation
+      - fvm::laplacian(alpha*rho*DepsilonEff(), epsilon_) // diffusion
      ==
-        C1_*alpha()*rho()*G*epsilon_()/k_()
-      - fvm::SuSp(((2.0/3.0)*C1_ + C3_)*alpha()*rho()*divU, epsilon_)
-      - fvm::Sp(C2_*alpha()*rho()*epsilon_()/k_(), epsilon_)
-      + epsilonSource()
-      + fvOptions(alpha, rho, epsilon_)
+        C1_*alpha()*rho()*G*epsilon_()/k_() // explicit part of production
+      - fvm::SuSp(((2.0/3.0)*C1_ + C3_)*alpha()*rho()*divU, epsilon_) // implicit part of production
+      - fvm::Sp(C2_*alpha()*rho()*epsilon_()/k_(), epsilon_) // dissipation
+      + epsilonSource() 
+      + fvOptions(alpha, rho, epsilon_) 
     );
 
     epsEqn.ref().relax();
@@ -284,18 +284,18 @@ void kEpsilon<BasicTurbulenceModel>::correct()
     fvOptions.correct(epsilon_);
     bound(epsilon_, this->epsilonMin_);
 
-    // Turbulent kinetic energy equation
+    // Turbulent kinetic energy equation -- generates matrix coefficients [A][x] = [b]
     tmp<fvScalarMatrix> kEqn
     (
-        fvm::ddt(alpha, rho, k_)
-      + fvm::div(alphaRhoPhi, k_)
-      - fvm::laplacian(alpha*rho*DkEff(), k_)
+        fvm::ddt(alpha, rho, k_) // temportal variation
+      + fvm::div(alphaRhoPhi, k_) // spatial variation
+      - fvm::laplacian(alpha*rho*DkEff(), k_) // diffusion
      ==
-        alpha()*rho()*G
-      - fvm::SuSp((2.0/3.0)*alpha()*rho()*divU, k_)
-      - fvm::Sp(alpha()*rho()*epsilon_()/k_(), k_)
-      + kSource()
-      + fvOptions(alpha, rho, k_)
+        alpha()*rho()*G // explicit part of production
+      - fvm::SuSp((2.0/3.0)*alpha()*rho()*divU, k_) // implicit part of production
+      - fvm::Sp(alpha()*rho()*epsilon_()/k_(), k_) // dissipation of k
+      + kSource() // source term
+      + fvOptions(alpha, rho, k_) // other term
     );
 
     kEqn.ref().relax();
