@@ -120,8 +120,8 @@ void atmBoundaryLayerMod::autoMap(const fvPatchFieldMapper& m)
     z0_.autoMap(m);
     zGround_.autoMap(m);
     Ustar_.autoMap(m);
-    A_.autoMap(m);						// IMPLEMENTED //
-    B_.autoMap(m);						// IMPLEMENTED //
+    //A_.autoMap(m);						// IMPLEMENTED //
+    //B_.autoMap(m);						// IMPLEMENTED //
 }
 
 
@@ -134,8 +134,8 @@ void atmBoundaryLayerMod::rmap
     z0_.rmap(blptf.z0_, addr);
     zGround_.rmap(blptf.zGround_, addr);
     Ustar_.rmap(blptf.Ustar_, addr);
-    A_.rmap(blptf.A_, addr);						// IMPLEMENTED //
-    B_.rmap(blptf.B_, addr);						// IMPLEMENTED //
+    //A_.rmap(blptf.A_, addr);						// IMPLEMENTED //
+    //B_.rmap(blptf.B_, addr);						// IMPLEMENTED //
 }
 
 
@@ -177,12 +177,12 @@ void atmBoundaryLayerMod::write(Ostream& os) const
     os.writeKeyword("Uref")
         << Uref_ << token::END_STATEMENT << nl;
     os.writeKeyword("Zref")
-        << Zref_ << token::END_STATEMENT << nl;
-    zGround_.writeEntry("zGround", os) ;					// IMPLEMENT HERE //
-    os.writeKeyword("A", os) ;					// IMPLEMENT HERE //
+        << Zref_ << token::END_STATEMENT << nl;					// IMPLEMENT HERE //
+    os.writeKeyword("A")					// IMPLEMENT HERE //
 	<< A_ << token::END_STATEMENT << nl;					// IMPLEMENT HERE //
-    os.writeKeyword("B", os) ;
-	<< B_ << token::END_STATEMENT << nl;					// IMPLEMENT HERE //
+    os.writeKeyword("B")
+	<< B_ << token::END_STATEMENT << nl;
+    zGround_.writeEntry("zGround", os) ;				// IMPLEMENT HERE //
 }
 
 
