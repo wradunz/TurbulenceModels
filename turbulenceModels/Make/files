@@ -69,10 +69,13 @@ $(RASBCs)/turbulentMixingLengthFrequencyInlet/turbulentMixingLengthFrequencyInle
 
 /* Atmospheric boundary layer BCs */
 $(RASBCs)/atmBoundaryLayer/atmBoundaryLayer.C
+$(RASBCs)/atmBoundaryLayerMod/atmBoundaryLayerMod.C
 $(RASBCs)/atmBoundaryLayerInletVelocity/atmBoundaryLayerInletVelocityFvPatchVectorField.C
 $(RASBCs)/atmBoundaryLayerInletK/atmBoundaryLayerInletKFvPatchScalarField.C
+$(RASBCs)/atmBoundaryLayerModInletK/atmBoundaryLayerModInletKFvPatchScalarField.C
 $(RASBCs)/atmBoundaryLayerInletEpsilon/atmBoundaryLayerInletEpsilonFvPatchScalarField.C
 
+/* Implemented wall function BCs */
 $(epsilonWallFunctions)/epsilonOngWallFunction/epsilonOngWallFunctionFvPatchScalarField.C
 $(epsilonWallFunctions)/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C
 /* $(nutWallFunctions)/nutOngWallFunction/nutOngWallFunctionFvPatchScalarField.C */

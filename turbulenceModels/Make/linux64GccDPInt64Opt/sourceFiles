@@ -33,8 +33,10 @@ $(fWallFunctions)/fWallFunction/fWallFunctionFvPatchScalarField.C \
 $(RASBCs)/turbulentMixingLengthDissipationRateInlet/turbulentMixingLengthDissipationRateInletFvPatchScalarField.C \
 $(RASBCs)/turbulentMixingLengthFrequencyInlet/turbulentMixingLengthFrequencyInletFvPatchScalarField.C \
 $(RASBCs)/atmBoundaryLayer/atmBoundaryLayer.C \
+$(RASBCs)/atmBoundaryLayerMod/atmBoundaryLayerMod.C \
 $(RASBCs)/atmBoundaryLayerInletVelocity/atmBoundaryLayerInletVelocityFvPatchVectorField.C \
 $(RASBCs)/atmBoundaryLayerInletK/atmBoundaryLayerInletKFvPatchScalarField.C \
+$(RASBCs)/atmBoundaryLayerInletKMod/atmBoundaryLayerInletKModFvPatchScalarField.C \
 $(RASBCs)/atmBoundaryLayerInletEpsilon/atmBoundaryLayerInletEpsilonFvPatchScalarField.C \
 $(epsilonWallFunctions)/epsilonOngWallFunction/epsilonOngWallFunctionFvPatchScalarField.C \
 $(epsilonWallFunctions)/epsilonAtmWallFunction/epsilonAtmWallFunctionFvPatchScalarField.C 
