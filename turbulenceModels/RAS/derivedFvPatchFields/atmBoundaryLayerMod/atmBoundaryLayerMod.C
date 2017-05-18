@@ -23,7 +23,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "atmBoundaryLayer.H"
+#include "atmBoundaryLayerMod.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -32,7 +32,7 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-atmBoundaryLayer::atmBoundaryLayer()
+atmBoundaryLayerMod::atmBoundaryLayerMod()
 :
     flowDir_(Zero),
     zDir_(Zero),
@@ -48,7 +48,7 @@ atmBoundaryLayer::atmBoundaryLayer()
 {}
 
 
-atmBoundaryLayer::atmBoundaryLayer(const vectorField& p, const dictionary& dict)
+atmBoundaryLayerMod::atmBoundaryLayerMod(const vectorField& p, const dictionary& dict)
 :
     flowDir_(dict.lookup("flowDir")),
     zDir_(dict.lookup("zDir")),
@@ -77,9 +77,9 @@ atmBoundaryLayer::atmBoundaryLayer(const vectorField& p, const dictionary& dict)
 }
 
 
-atmBoundaryLayer::atmBoundaryLayer
+atmBoundaryLayerMod::atmBoundaryLayerMod
 (
-    const atmBoundaryLayer& ptf,
+    const atmBoundaryLayerMod& ptf,
     const fvPatchFieldMapper& mapper
 )
 :
@@ -97,7 +97,7 @@ atmBoundaryLayer::atmBoundaryLayer
 {}
 
 
-atmBoundaryLayer::atmBoundaryLayer(const atmBoundaryLayer& blpvf)
+atmBoundaryLayerMod::atmBoundaryLayerMod(const atmBoundaryLayerMod& blpvf)
 :
     flowDir_(blpvf.flowDir_),
     zDir_(blpvf.zDir_),
@@ -115,7 +115,7 @@ atmBoundaryLayer::atmBoundaryLayer(const atmBoundaryLayer& blpvf)
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-void atmBoundaryLayer::autoMap(const fvPatchFieldMapper& m)
+void atmBoundaryLayerMod::autoMap(const fvPatchFieldMapper& m)
 {
     z0_.autoMap(m);
     zGround_.autoMap(m);
@@ -125,9 +125,9 @@ void atmBoundaryLayer::autoMap(const fvPatchFieldMapper& m)
 }
 
 
-void atmBoundaryLayer::rmap
+void atmBoundaryLayerMod::rmap
 (
-    const atmBoundaryLayer& blptf,
+    const atmBoundaryLayerMod& blptf,
     const labelList& addr
 )
 {
@@ -139,7 +139,7 @@ void atmBoundaryLayer::rmap
 }
 
 
-tmp<vectorField> atmBoundaryLayer::U(const vectorField& p) const
+tmp<vectorField> atmBoundaryLayerMod::U(const vectorField& p) const
 {
     scalarField Un
     (
@@ -151,19 +151,19 @@ tmp<vectorField> atmBoundaryLayer::U(const vectorField& p) const
 }
 
 										// IMPLEMENT HERE -- check if there is no problem with A and B being defined as scalars //
-tmp<scalarField> atmBoundaryLayer::k(const vectorField& p) const
+tmp<scalarField> atmBoundaryLayerMod::k(const vectorField& p) const
 {
     return A_*log((zDir_ & p) - zGround_ + z0_) + B_;//sqr(Ustar_)/sqrt(Cmu_);
 }
 
 
-tmp<scalarField> atmBoundaryLayer::epsilon(const vectorField& p) const
+tmp<scalarField> atmBoundaryLayerMod::epsilon(const vectorField& p) const
 {
     return pow3(Ustar_)/(kappa_*((zDir_ & p) - zGround_ + z0_));
 }
 
 										// IMPLEMENT HERE //
-void atmBoundaryLayer::write(Ostream& os) const
+void atmBoundaryLayerMod::write(Ostream& os) const
 {
     z0_.writeEntry("z0", os) ;
     os.writeKeyword("flowDir")

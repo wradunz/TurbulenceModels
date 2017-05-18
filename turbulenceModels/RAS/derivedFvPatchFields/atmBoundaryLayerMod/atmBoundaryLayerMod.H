@@ -22,7 +22,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::atmBoundaryLayer
+    Foam::atmBoundaryLayerMod
 
 Group
     grpRASBoundaryConditions grpInletBoundaryConditions
@@ -65,8 +65,8 @@ Description
         Z_{ref} | Reference height [m]
     \endvartable
 
-    Use in the atmBoundaryLayerInletVelocity, atmBoundaryLayerInletK and
-    atmBoundaryLayerInletEpsilon boundary conditions.
+    Use in the atmBoundaryLayerModInletVelocity, atmBoundaryLayerModInletK and
+    atmBoundaryLayerModInletEpsilon boundary conditions.
 
     Reference:
         D.M. Hargreaves and N.G. Wright,  "On the use of the k-epsilon model
@@ -91,7 +91,7 @@ Usage
     \verbatim
     ground
     {
-        type            atmBoundaryLayerInletVelocity;
+        type            atmBoundaryLayerModInletVelocity;
         flowDir         (1 0 0);
         zDir            (0 0 1);
         Uref            10.0;
@@ -108,12 +108,12 @@ Note
     reference.
 
 SourceFiles
-    atmBoundaryLayer.C
+    atmBoundaryLayerMod.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef atmBoundaryLayer_H
-#define atmBoundaryLayer_H
+#ifndef atmBoundaryLayerMod_H
+#define atmBoundaryLayerMod_H
 
 #include "fvPatchFields.H"
 
@@ -123,10 +123,10 @@ namespace Foam
 {
 
 /*---------------------------------------------------------------------------*\
-       Class atmBoundaryLayer Declaration
+       Class atmBoundaryLayerMod Declaration
 \*---------------------------------------------------------------------------*/
 
-class atmBoundaryLayer
+class atmBoundaryLayerMod
 {
     // Private data
 
@@ -169,21 +169,21 @@ public:
     // Constructors
 
         //- Construct null
-        atmBoundaryLayer();
+        atmBoundaryLayerMod();
 
         //- Construct from the coordinates field and dictionary
-        atmBoundaryLayer(const vectorField& p, const dictionary&);
+        atmBoundaryLayerMod(const vectorField& p, const dictionary&);
 
         //- Construct by mapping given
-        // atmBoundaryLayer onto a new patch
-        atmBoundaryLayer
+        // atmBoundaryLayerMod onto a new patch
+        atmBoundaryLayerMod
         (
-            const atmBoundaryLayer&,
+            const atmBoundaryLayerMod&,
             const fvPatchFieldMapper&
         );
 
         //- Construct as copy
-        atmBoundaryLayer(const atmBoundaryLayer&);
+        atmBoundaryLayerMod(const atmBoundaryLayerMod&);
 
 
     // Member functions
@@ -215,7 +215,7 @@ public:
             void autoMap(const fvPatchFieldMapper&);
 
             //- Reverse map the given fvPatchField onto this fvPatchField
-            void rmap(const atmBoundaryLayer&, const labelList&);
+            void rmap(const atmBoundaryLayerMod&, const labelList&);
 
 
         // Evaluate functions
