@@ -42,7 +42,9 @@ atmBoundaryLayer::atmBoundaryLayer()
     Zref_(0),
     z0_(0),
     zGround_(0),
-    Ustar_(0)
+    Ustar_(0),
+    A_(0),						// IMPLEMENTED //
+    B_(0)						// IMPLEMENTED //
 {}
 
 
@@ -56,7 +58,9 @@ atmBoundaryLayer::atmBoundaryLayer(const vectorField& p, const dictionary& dict)
     Zref_(readScalar(dict.lookup("Zref"))),
     z0_("z0", dict, p.size()),
     zGround_("zGround", dict, p.size()),
-    Ustar_(p.size())
+    Ustar_(p.size()),
+    A_(readScalar(dict.lookup("A"))),						// IMPLEMENTED //
+    B_(readScalar(dict.lookup("B")))						// IMPLEMENTED //
 {
     if (mag(flowDir_) < SMALL || mag(zDir_) < SMALL)
     {
@@ -87,7 +91,9 @@ atmBoundaryLayer::atmBoundaryLayer
     Zref_(ptf.Zref_),
     z0_(ptf.z0_, mapper),
     zGround_(ptf.zGround_, mapper),
-    Ustar_(ptf.Ustar_, mapper)
+    Ustar_(ptf.Ustar_, mapper),
+    A_(ptf.A_),						// IMPLEMENTED //
+    B_(ptf.B_)						// IMPLEMENTED //
 {}
 
 
@@ -101,7 +107,9 @@ atmBoundaryLayer::atmBoundaryLayer(const atmBoundaryLayer& blpvf)
     Zref_(blpvf.Zref_),
     z0_(blpvf.z0_),
     zGround_(blpvf.zGround_),
-    Ustar_(blpvf.Ustar_)
+    Ustar_(blpvf.Ustar_),
+    A_(blpvf.A_),						// IMPLEMENTED //
+    B_(blpvf.B_)						// IMPLEMENTED //
 {}
 
 
@@ -112,6 +120,8 @@ void atmBoundaryLayer::autoMap(const fvPatchFieldMapper& m)
     z0_.autoMap(m);
     zGround_.autoMap(m);
     Ustar_.autoMap(m);
+    A_.autoMap(m);						// IMPLEMENTED //
+    B_.autoMap(m);						// IMPLEMENTED //
 }
 
 
@@ -124,6 +134,8 @@ void atmBoundaryLayer::rmap
     z0_.rmap(blptf.z0_, addr);
     zGround_.rmap(blptf.zGround_, addr);
     Ustar_.rmap(blptf.Ustar_, addr);
+    A_.rmap(blptf.A_, addr);						// IMPLEMENTED //
+    B_.rmap(blptf.B_, addr);						// IMPLEMENTED //
 }
 
 
@@ -138,10 +150,10 @@ tmp<vectorField> atmBoundaryLayer::U(const vectorField& p) const
     return flowDir_*Un;
 }
 
-										// IMPLEMENT HERE //
+										// IMPLEMENT HERE -- check if there is no problem with A and B being defined as scalars //
 tmp<scalarField> atmBoundaryLayer::k(const vectorField& p) const
 {
-    return sqr(Ustar_)/sqrt(Cmu_);
+    return A_*log((zDir_ & p) - zGround_ + z0_) + B_;//sqr(Ustar_)/sqrt(Cmu_);
 }
 
 
@@ -166,7 +178,11 @@ void atmBoundaryLayer::write(Ostream& os) const
         << Uref_ << token::END_STATEMENT << nl;
     os.writeKeyword("Zref")
         << Zref_ << token::END_STATEMENT << nl;
-    zGround_.writeEntry("zGround", os) ;
+    zGround_.writeEntry("zGround", os) ;					// IMPLEMENT HERE //
+    os.writeKeyword("A", os) ;					// IMPLEMENT HERE //
+	<< A_ << token::END_STATEMENT << nl;					// IMPLEMENT HERE //
+    os.writeKeyword("B", os) ;
+	<< B_ << token::END_STATEMENT << nl;					// IMPLEMENT HERE //
 }
 
 
